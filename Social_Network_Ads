@@ -1,0 +1,15 @@
+import pandas as pd
+import statsmodels.api as sm
+import numpy as np
+
+df = pd.read_csv('Social_Network_Ads.csv')
+X = sm.add_constant(df['Age'])
+y = df['EstimatedSalary']
+model = sm.OLS(y, X).fit()
+print(model.summary())
+
+# Manual calculation
+n, sum_x, sum_y, sum_xy, sum_x2 = len(df), df['Age'].sum(), y.sum(), (df['Age']*y).sum(), (df['Age']**2).sum()
+beta1 = (n*sum_xy - sum_x*sum_y) / (n*sum_x2 - sum_x**2)
+beta0 = y.mean() - beta1 * df['Age'].mean()
+print(f"beta0: {beta0:.2f}, beta1: {beta1:.2f}")
